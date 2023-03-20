@@ -28,6 +28,7 @@ namespace API.Data
 
                 context.Users.Add(user);
             }
+            
             await context.SaveChangesAsync();
         }
     }

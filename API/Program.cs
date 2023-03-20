@@ -1,5 +1,6 @@
 using System.Text;
 using API.Data;
+using API.Helpers;
 using API.Interfaces;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +20,8 @@ builder.Services.AddDbContext<DataContext>(opt => {
 builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();  // usiamo l'interfaccia per il testing in modo da tenerlo isolato da altre classi, in quanto possiamo mockare 
                                                             //  l'implementazione dell'interfaccia senza usare quelle effettive
+
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
 {
@@ -32,6 +35,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 });
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<IPhotoService,PhotoService>();
+
 var app = builder.Build();
 if(builder.Environment.IsDevelopment()){
     app.UseDeveloperExceptionPage();
